@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A to Z Packers & Movers - Document Generator</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(135deg,#f8fafc 0%,#e2e8f0 100%);min-height:100vh;color:#1e293b;line-height:1.6}
+    .container{max-width:860px;margin:0 auto;padding:20px}
+    .header{text-align:center;margin-bottom:30px;background:#fff;padding:25px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+    .logo{width:80px;height:80px;background:linear-gradient(135deg,#059669 0%,#10b981 100%);border-radius:50%;margin:0 auto 15px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:32px;font-weight:700}
+    .company-name{font-size:28px;font-weight:700;color:#059669;margin-bottom:8px}
+    .tagline{color:#64748b;font-size:16px}
+    .form-container{background:#fff;border-radius:16px;padding:30px;box-shadow:0 4px 20px rgba(0,0,0,.08);margin-bottom:20px}
+    .section{margin-bottom:35px}
+    .section-title{font-size:20px;font-weight:600;color:#059669;margin-bottom:20px;padding-bottom:8px;border-bottom:2px solid #e2e8f0}
+    .form-group{margin-bottom:20px}
+    .form-row{display:grid;grid-template-columns:1fr;gap:20px}
+    @media(min-width:640px){.form-row{grid-template-columns:1fr 1fr}}
+    label{display:block;font-weight:500;color:#374151;margin-bottom:6px;font-size:14px}
+    .required{color:#ef4444}
+    input,select,textarea{width:100%;padding:12px 16px;border:2px solid #e2e8f0;border-radius:8px;font-size:16px;transition:all .2s;background:#fff}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,.1)}
+    textarea{resize:vertical;min-height:80px}
+    .dropdown-panel{border:2px solid #e2e8f0;border-radius:8px;background:#fff}
+    .dropdown-header{padding:12px 16px;background:#f8fafc;border-bottom:1px solid #e2e8f0;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-weight:500}
+    .dropdown-content{padding:20px;display:none}
+    .dropdown-content.active{display:block}
+    .material-item{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #f1f5f9}
+    .material-item:last-child{border-bottom:none}
+    .material-input{width:90px;padding:6px 8px;font-size:14px}
+    .materials-summary{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}
+    .material-pill{background:#dcfce7;color:#166534;padding:4px 12px;border-radius:20px;font-size:12px;font-weight:500}
+    .items-container{max-height:220px;overflow-y:auto;border:2px solid #e2e8f0;border-radius:8px;background:#fff}
+    .item-option{padding:10px 16px;border-bottom:1px solid #f1f5f9;cursor:pointer;transition:background .2s}
+    .item-option:hover{background:#f8fafc}
+    .item-option.selected{background:#dcfce7;color:#166534}
+    .selected-items{margin-top:10px;display:flex;flex-wrap:wrap;gap:8px}
+    .item-chip{background:#059669;color:#fff;padding:6px 12px;border-radius:20px;font-size:12px;display:flex;align-items:center;gap:6px}
+    .remove-item{cursor:pointer;font-weight:bold}
+    .search-input{margin-bottom:10px}
+    .buttons{display:flex;gap:15px;flex-direction:column}
+    @media(min-width:640px){.buttons{flex-direction:row}}
+    .btn{padding:14px 28px;border:none;border-radius:8px;font-size:16px;font-weight:600;cursor:pointer;transition:all .2s;flex:1}
+    .btn-primary{background:linear-gradient(135deg,#059669 0%,#10b981 100%);color:#fff}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 25px rgba(5,150,105,.3)}
+    .btn-secondary{background:#f1f5f9;color:#475569;border:2px solid #e2e8f0}
+    .btn-secondary:hover{background:#e2e8f0}
+    .error{color:#ef4444;font-size:14px;margin-top:4px}
+    .modal{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.8);z-index:1000}
+    .modal-content{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);background:#fff;border-radius:16px;padding:30px;max-width:560px;width:92%;text-align:center}
+    .modal-actions{display:flex;gap:12px;margin-top:20px;flex-wrap:wrap}
+    .success-icon{width:60px;height:60px;background:#10b981;border-radius:50%;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px}
+    .loading{display:inline-block;width:20px;height:20px;border:2px solid #fff;border-radius:50%;border-top-color:transparent;animation:spin 1s ease-in-out infinite}
+    #downloadsContainer a{display:block;margin:8px 0;text-decoration:none}
+    @keyframes spin{to{transform:rotate(360deg)}}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">AZ</div>
+      <h1 class="company-name">A to Z Packers & Movers</h1>
+      <p class="tagline">Professional Moving Solutions</p>
+    </div>
+
+    <form id="movingForm" class="form-container">
+      <!-- Customer Details -->
+      <div class="section">
+        <h2 class="section-title">Customer Details</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="customerName">Customer Name <span class="required">*</span></label>
+            <input type="text" id="customerName" name="customerName" required />
+          </div>
+          <div class="form-group">
+            <label for="contactNumber">Contact Number <span class="required">*</span></label>
+            <input type="tel" id="contactNumber" name="contactNumber" inputmode="numeric" autocomplete="tel" required />
+            <div id="contactError" class="error" style="display:none">Enter a valid 10-digit Indian number</div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="fromLocation">From Location <span class="required">*</span></label>
+            <input type="text" id="fromLocation" name="fromLocation" required />
+          </div>
+          <div class="form-group">
+            <label for="toLocation">To Location <span class="required">*</span></label>
+            <input type="text" id="toLocation" name="toLocation" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- Job Details -->
+      <div class="section">
+        <h2 class="section-title">Job Details</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="startDate">Starting Date <span class="required">*</span></label>
+            <input type="date" id="startDate" name="startDate" required />
+          </div>
+          <div class="form-group">
+            <label for="endDate">Ending Date <span class="required">*</span></label>
+            <input type="date" id="endDate" name="endDate" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="workers">Number of Workers <span class="required">*</span></label>
+            <input type="number" id="workers" name="workers" min="0" required />
+          </div>
+          <div class="form-group">
+            <label for="vehicleType">Vehicle Type</label>
+            <select id="vehicleType" name="vehicleType">
+              <option value="Pickup">Pickup</option>
+              <option value="10 Feet">10 Feet</option>
+              <option value="14 Feet">14 Feet</option>
+              <option value="17 Feet">17 Feet</option>
+              <option value="18 Feet">18 Feet</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment Details -->
+      <div class="section">
+        <h2 class="section-title">Payment Details</h2>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="baseAmount">Base Amount (₹) <span class="required">*</span></label>
+            <input type="number" id="baseAmount" name="baseAmount" min="0" required />
+          </div>
+          <div class="form-group">
+            <label for="advanceAmount">Advance Amount (₹) <span class="required">*</span></label>
+            <input type="number" id="advanceAmount" name="advanceAmount" min="0" required />
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="gstToggle">GST (12%)</label>
+            <select id="gstToggle" name="gstToggle">
+              <option value="on" selected>Apply 12% GST</option>
+              <option value="off">Do not apply</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="fivePctToggle">5% Surcharge</label>
+            <select id="fivePctToggle" name="fivePctToggle">
+              <option value="on">Apply 5%</option>
+              <option value="off" selected>Do not apply</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="electrification">Electrification (fixed ₹2,000 when selected)</label>
+            <select id="electrification" name="electrification">
+              <option value="None" selected>None</option>
+              <option value="AC">AC</option>
+              <option value="Geyser">Geyser</option>
+              <option value="Inverter">Inverter</option>
+              <option value="Fan">Fan</option>
+              <option value="TV">TV</option>
+              <option value="Aquaguard">Aquaguard</option>
+              <option value="Other">Other</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="totalAmount">Total Amount (calculated)</label>
+            <input type="number" id="totalAmount" name="totalAmount" min="0" readonly />
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="paymentTerms">Payment Terms & Conditions</label>
+          <textarea id="paymentTerms" name="paymentTerms" readonly>90% payment at loading point and the remaining 10% at unloading point</textarea>
+        </div>
+      </div>
+
+      <!-- Materials -->
+      <div class="section">
+        <h2 class="section-title">Materials</h2>
+        <div class="dropdown-panel">
+          <div class="dropdown-header" onclick="toggleDropdown('materials')">
+            <span>Select Materials & Quantities</span>
+            <span>▼</span>
+          </div>
+          <div class="dropdown-content" id="materials">
+            <div class="material-item"><label>Lamination (%)</label><input type="number" class="material-input" id="lamination" min="0" max="100" value="0" /></div>
+            <div class="material-item"><label>Corrugated Sheet (%)</label><input type="number" class="material-input" id="corrugatedSheet" min="0" max="100" value="0" /></div>
+            <div class="material-item"><label>Cartons</label><input type="number" class="material-input" id="cartons" min="0" max="100" value="0" /></div>
+            <div class="material-item"><label>Bubble Sheet (%)</label><input type="number" class="material-input" id="bubbleSheet" min="0" max="100" value="0" /></div>
+            <div class="material-item"><label>Fabric Sheet (%)</label><input type="number" class="material-input" id="fabricSheet" min="0" max="100" value="0" /></div>
+            <div class="material-item"><label>Thermocol</label><input type="number" class="material-input" id="thermocol" min="0" max="20" value="0" /></div>
+            <div class="material-item"><label>Blue Foam (%)</label><input type="number" class="material-input" id="blueFoam" min="0" max="100" value="0" /></div>
+            <div class="material-item"><label>Cello Tape</label><input type="number" class="material-input" id="celloTape" min="0" max="50" value="0" /></div>
+          </div>
+        </div>
+        <div class="materials-summary" id="materialsSummary"></div>
+      </div>
+
+      <!-- Item List + Description -->
+      <div class="section">
+        <h2 class="section-title">Item List</h2>
+        <div class="form-group">
+          <input type="text" id="itemSearch" class="search-input" placeholder="Search items..." />
+          <div class="items-container" id="itemsContainer"></div>
+          <div class="selected-items" id="selectedItems"></div>
+        </div>
+        <div class="form-group">
+          <label for="extraDescription">Additional Description</label>
+          <textarea id="extraDescription" placeholder="Notes, floor/lift, etc."></textarea>
+        </div>
+      </div>
+
+      <div class="buttons">
+        <button type="submit" class="btn btn-primary">
+          <span id="generateText">Generate Papers</span>
+          <span id="loadingSpinner" class="loading" style="display:none"></span>
+        </button>
+        <button type="button" class="btn btn-secondary" onclick="resetForm()">Reset</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Success Modal -->
+  <div id="successModal" class="modal" role="dialog" aria-modal="true" aria-labelledby="successTitle">
+    <div class="modal-content">
+      <div class="success-icon">✓</div>
+      <h3 id="successTitle">Documents Generated Successfully!</h3>
+      <p>Tap to download or share. Pop‑ups are not used.</p>
+      <div id="downloadsContainer" class="modal-actions"></div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" onclick="shareWhatsAppSummary()">Share Summary via WhatsApp</button>
+        <button class="btn btn-primary" onclick="closeModal()">Done</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const items = [
+      'Bed','Mattress','Sofa Set','Dining Table','Chairs','Cupboard/Wardrobe','Fridge','Washing Machine','TV','AC','Geyser','Inverter + Battery','Gas Stove','Utensil Boxes','Clothes Boxes','Books Boxes','Shoe Rack','Study Table','Computer','Printer','Dressing Table','Side Tables','Plastic Chairs','Buckets','Flower Pots','Musical Instruments','Puja Items','Microwave','Mixer Grinder','Iron Box','Vacuum Cleaner','Cooler','Fan','Curtains','Carpet','Mirror','Photo Frames','Kitchen Items','Bathroom Items','Garden Tools','Sports Equipment','Toys'
+    ];
+
+    let selectedItems = [];
+    let formData = {};
+    let generatedFiles = []; // {name, url, blob}
+
+    document.addEventListener('DOMContentLoaded', () => {
+      populateItems();
+      setupMaterialListeners();
+      setupFormValidation();
+      const vehSel = document.getElementById('vehicleType');
+      applyMaterialPresetForVehicle(vehSel.value);
+      vehSel.addEventListener('change', (e)=>applyMaterialPresetForVehicle(e.target.value));
+    });
+
+    // Vehicle presets
+    function applyMaterialPresetForVehicle(type){
+      const ids = ['lamination','corrugatedSheet','cartons','bubbleSheet','fabricSheet','thermocol','blueFoam','celloTape'];
+      const zeroAll = () => ids.forEach(id => document.getElementById(id).value = 0);
+      zeroAll();
+      switch(type){
+        case 'Pickup':
+          setVals({ fabricSheet:15, celloTape:5, bubbleSheet:15, thermocol:3, lamination:50, blueFoam:15 });
+          break;
+        case '14 Feet':
+          setVals({ fabricSheet:28, celloTape:7, bubbleSheet:20, thermocol:4, lamination:60, blueFoam:25, cartons:20 });
+          break;
+        case '17 Feet':
+          setVals({ fabricSheet:30, cartons:25, celloTape:8, bubbleSheet:25, thermocol:4, lamination:80, blueFoam:25 });
+          break;
+        case '18 Feet':
+          setVals({ fabricSheet:30, celloTape:8, bubbleSheet:25, thermocol:4, lamination:80, blueFoam:25, cartons:30 });
+          break;
+        case 'Other':
+          // all zeros for manual inputs
+          break;
+        default:
+          // 10 Feet left manual (no preset provided)
+          break;
+      }
+      updateMaterialsSummary();
+    }
+    function setVals(map){ for(const [k,v] of Object.entries(map)){ const el=document.getElementById(k); if(el) el.value=v; } }
+
+    function populateItems(){
+      const container = document.getElementById('itemsContainer');
+      items.forEach(item => {
+        const div = document.createElement('div');
+        div.className = 'item-option';
+        div.textContent = item;
+        div.onclick = () => toggleItem(item, div);
+        container.appendChild(div);
+      });
+    }
+
+    function toggleItem(item, element){
+      if(selectedItems.includes(item)){
+        selectedItems = selectedItems.filter(i => i !== item);
+        element.classList.remove('selected');
+      } else {
+        selectedItems.push(item);
+        element.classList.add('selected');
+      }
+      updateSelectedItems();
+    }
+
+    function updateSelectedItems(){
+      const container = document.getElementById('selectedItems');
+      container.innerHTML = '';
+      selectedItems.forEach(item => {
+        const chip = document.createElement('div');
+        chip.className = 'item-chip';
+        chip.innerHTML = `${item} <span class="remove-item" onclick="removeItem('${item}')">×</span>`;
+        container.appendChild(chip);
+      });
+    }
+
+    function removeItem(item){
+      selectedItems = selectedItems.filter(i => i !== item);
+      document.querySelectorAll('.item-option').forEach(el => { if(el.textContent === item){ el.classList.remove('selected'); } });
+      updateSelectedItems();
+    }
+
+    function toggleDropdown(id){
+      document.getElementById(id).classList.toggle('active');
+    }
+
+    function setupMaterialListeners(){
+      document.querySelectorAll('.material-input').forEach(input => input.addEventListener('input', updateMaterialsSummary));
+    }
+
+    function updateMaterialsSummary(){
+      const summary = document.getElementById('materialsSummary');
+      summary.innerHTML = '';
+      const materials = [
+        {id:'lamination',label:'Lamination',unit:'%'},
+        {id:'corrugatedSheet',label:'Corrugated Sheet',unit:'%'},
+        {id:'cartons',label:'Cartons',unit:''},
+        {id:'bubbleSheet',label:'Bubble Sheet',unit:'%'},
+        {id:'fabricSheet',label:'Fabric Sheet',unit:'%'},
+        {id:'thermocol',label:'Thermocol',unit:''},
+        {id:'blueFoam',label:'Blue Foam',unit:'%'},
+        {id:'celloTape',label:'Cello Tape',unit:''}
+      ];
+      materials.forEach(m => {
+        const val = document.getElementById(m.id).value;
+        if(val && Number(val) > 0){
+          const pill = document.createElement('div');
+          pill.className = 'material-pill';
+          pill.textContent = `${m.label}: ${val}${m.unit}`;
+          summary.appendChild(pill);
+        }
+      });
+    }
+
+    function setupFormValidation(){
+      const form = document.getElementById('movingForm');
+      const advanceAmount = document.getElementById('advanceAmount');
+
+      // relaxed phone check (digits only count)
+      const contactInput = document.getElementById('contactNumber');
+      const contactError = document.getElementById('contactError');
+      contactInput.addEventListener('input', () => {
+        const digits = contactInput.value.replace(/\D/g,'');
+        if(digits.length === 10){ contactError.style.display='none'; }
+      });
+
+      advanceAmount.addEventListener('input', function(){
+        const base = parseFloat(document.getElementById('baseAmount').value) || 0;
+        const adv = parseFloat(this.value) || 0;
+        this.setCustomValidity(adv > base*2 ? 'Advance amount seems too high' : '');
+      });
+
+      // Search filter
+      document.getElementById('itemSearch').addEventListener('input', function(){
+        const q = this.value.toLowerCase();
+        document.querySelectorAll('.item-option').forEach(opt => {
+          opt.style.display = opt.textContent.toLowerCase().includes(q) ? 'block' : 'none';
+        });
+      });
+
+      form.addEventListener('submit', handleSubmit);
+    }
+
+    function handleSubmit(e){
+      e.preventDefault();
+      if(!validateForm()) return;
+
+      const generateText = document.getElementById('generateText');
+      const loadingSpinner = document.getElementById('loadingSpinner');
+      generateText.style.display = 'none';
+      loadingSpinner.style.display = 'inline-block';
+
+      if(generatedFiles && generatedFiles.length){ generatedFiles.forEach(f => URL.revokeObjectURL(f.url)); }
+      generatedFiles = [];
+
+      const baseAmount = parseFloat(document.getElementById('baseAmount').value)||0;
+      const gstOn = document.getElementById('gstToggle').value === 'on';
+      const fiveOn = document.getElementById('fivePctToggle').value === 'on';
+      const electrificationSel = document.getElementById('electrification').value;
+      const gstAmount = gstOn ? Math.round(baseAmount * 0.12) : 0;
+      const fivePctAmount = fiveOn ? Math.round(baseAmount * 0.05) : 0;
+      const electrificationFee = electrificationSel !== 'None' ? 2000 : 0;
+      const computedTotal = baseAmount + gstAmount + fivePctAmount + electrificationFee;
+
+      formData = {
+        customerName: document.getElementById('customerName').value.trim(),
+        contactNumber: document.getElementById('contactNumber').value.replace(/\D/g,'').slice(-10),
+        fromLocation: document.getElementById('fromLocation').value.trim(),
+        toLocation: document.getElementById('toLocation').value.trim(),
+        startDate: document.getElementById('startDate').value,
+        endDate: document.getElementById('endDate').value,
+        workers: parseInt(document.getElementById('workers').value)||0,
+        vehicleType: document.getElementById('vehicleType').value,
+        baseAmount,
+        gstApplied: gstOn,
+        gstRate: 12,
+        gstAmount,
+        fivePctApplied: fiveOn,
+        fivePctAmount,
+        electrification: electrificationSel,
+        electrificationFee,
+        totalAmount: computedTotal,
+        advanceAmount: parseFloat(document.getElementById('advanceAmount').value)||0,
+        paymentTerms: document.getElementById('paymentTerms').value,
+        materials: getMaterials(),
+        items: [...selectedItems],
+        extraDescription: document.getElementById('extraDescription').value.trim(),
+        timestamp: new Date().toISOString()
+      };
+      document.getElementById('totalAmount').value = computedTotal;
+
+      try{
+        generateAllPDFs();
+        buildDownloadsUI();
+        document.getElementById('successModal').style.display = 'block';
+      }catch(err){
+        console.error('PDF generation failed:', err);
+        alert('Failed to generate PDFs. Please try again.');
+      }finally{
+        generateText.style.display = 'inline';
+        loadingSpinner.style.display = 'none';
+      }
+    }
+
+    function validateForm(){
+      const required = ['customerName','contactNumber','fromLocation','toLocation','startDate','endDate','workers','baseAmount','advanceAmount'];
+      for(const id of required){
+        const el = document.getElementById(id);
+        if(!String(el.value).trim()){
+          alert(`Please fill in ${id.replace(/([A-Z])/g,' $1').toLowerCase()}`);
+          el.focus();
+          return false;
+        }
+      }
+      const digits = document.getElementById('contactNumber').value.replace(/\D/g,'');
+      if(digits.length !== 10){
+        document.getElementById('contactError').style.display='block';
+        document.getElementById('contactNumber').focus();
+        return false;
+      }
+      const base = parseFloat(document.getElementById('baseAmount').value)||0;
+      const adv = parseFloat(document.getElementById('advanceAmount').value)||0;
+      if(base <= 0){ alert('Base amount must be greater than 0'); return false; }
+      if(adv > base*2){ alert('Advance amount seems too high'); return false; }
+      return true;
+    }
+
+    function getMaterials(){
+      const ids = ['lamination','corrugatedSheet','cartons','bubbleSheet','fabricSheet','thermocol','blueFoam','celloTape'];
+      const out = {};
+      ids.forEach(id => { const v = document.getElementById(id).value; if(v && Number(v) > 0) out[id]=Number(v); });
+      return out;
+    }
+
+    function generateAllPDFs(){
+      if(!window.jspdf) throw new Error('jsPDF not loaded');
+      generatePlanningSheet();
+      generateAgreementPaper();
+      generateItemList();
+      generateBill();
+      generateEstimate();
+    }
+
+    function pushFile(doc, name){
+      const blob = doc.output('blob');
+      const url = URL.createObjectURL(blob);
+      generatedFiles.push({ name: `${name} - ${formData.customerName || 'Customer'}.pdf`, url, blob });
+    }
+
+    function addHeader(doc, title){
+      doc.setFontSize(20); doc.setTextColor(5,150,105); doc.text('AZ', 170, 25);
+      doc.setFontSize(16); doc.text('A to Z Packers & Movers', 20, 25);
+      doc.setFontSize(10); doc.setTextColor(0,0,0);
+      doc.text('Professional Moving Solutions', 20, 32);
+      doc.text('Phone: +91 9338888550 | Email: info@atozpackersmovers.in', 20, 38);
+      doc.text('GSTIN: 21BBTPS3094R2ZN', 20, 44);
+      doc.setFontSize(14); doc.setTextColor(5,150,105); doc.text(title, 20, 55);
+      doc.setTextColor(0,0,0);
+    }
+
+    function addFooter(doc){
+      const h = doc.internal.pageSize.height;
+      doc.setFontSize(10);
+      doc.text('Payment Details:', 20, h-40);
+      doc.text('Bank: State Bank of India', 20, h-35);
+      doc.text('A/c No: 34372907502', 20, h-30);
+      doc.text('IFSC: SBIN0001992', 20, h-25);
+      doc.text('A/c Name: A To Z Packers And Movers', 20, h-20);
+      doc.text('Authorized Signatory & Stamp', 120, h-25);
+      doc.line(120, h-15, 180, h-15);
+    }
+
+    function formatDate(s){ if(!s) return 'N/A'; const d=new Date(s); return d.toLocaleDateString('en-IN'); }
+    function formatCurrency(a){ if(!a) return '0.00'; return Number(a).toLocaleString('en-IN',{minimumFractionDigits:2,maximumFractionDigits:2}); }
+    function numberToWords(n){
+      if(!n || n===0) return 'Zero';
+      n = Math.floor(n);
+      const ones=['','One','Two','Three','Four','Five','Six','Seven','Eight','Nine'];
+      const tens=['','','Twenty','Thirty','Forty','Fifty','Sixty','Seventy','Eighty','Ninety'];
+      const teens=['Ten','Eleven','Twelve','Thirteen','Fourteen','Fifteen','Sixteen','Seventeen','Eighteen','Nineteen'];
+      const to99 = x=> x<10?ones[x]: x<20?teens[x-10]: tens[Math.floor(x/10)]+(x%10?' '+ones[x%10]:'');
+      const to999 = x=> x<100?to99(x): ones[Math.floor(x/100)]+' Hundred'+(x%100?' '+to99(x%100):'');
+      if(n<1000) return to999(n);
+      if(n<100000) return to999(Math.floor(n/1000))+' Thousand'+(n%1000?' '+to999(n%1000):'');
+      if(n<10000000) return to999(Math.floor(n/100000))+' Lakh'+(n%100000?' '+to999(n%100000):'');
+      return 'Amount too large';
+    }
+
+    function formatMaterialLabel(key){
+      const m={lamination:'Lamination',corrugatedSheet:'Corrugated Sheet',cartons:'Cartons',bubbleSheet:'Bubble Sheet',fabricSheet:'Fabric Sheet',thermocol:'Thermocol',blueFoam:'Blue Foam',celloTape:'Cello Tape'};return m[key]||key;
+    }
+    function getMaterialUnit(key){
+      const u={lamination:'%',corrugatedSheet:'%',cartons:'',bubbleSheet:'%',fabricSheet:'%',thermocol:'',blueFoam:'%',celloTape:''};return u[key]||'';
+    }
+
+    function generatePlanningSheet(){
+      const { jsPDF } = window.jspdf; const doc = new jsPDF(); addHeader(doc,'PLANNING SHEET');
+      let y=70; doc.setFontSize(12); doc.setTextColor(0,0,0);
+      doc.text(`Customer: ${formData.customerName||'N/A'}`,20,y);
+      doc.text(`Contact: ${formData.contactNumber||'N/A'}`,20,y+10);
+      doc.text(`Route: ${formData.fromLocation||'N/A'} → ${formData.toLocation||'N/A'}`,20,y+20);
+      doc.text(`Dates: ${formatDate(formData.startDate)} to ${formatDate(formData.endDate)}`,20,y+30);
+      doc.text(`Workers: ${formData.workers||0}`,20,y+40);
+      doc.text(`Vehicle: ${formData.vehicleType||'N/A'}`,20,y+50);
+      y+=70; doc.setFontSize(14); doc.setTextColor(5,150,105); doc.text('Materials Required:',20,y); y+=15; doc.setFontSize(11); doc.setTextColor(0,0,0);
+      if(formData.materials && Object.keys(formData.materials).length){
+        Object.entries(formData.materials).forEach(([k,v])=>{ if(v && v>0){ doc.text(`• ${formatMaterialLabel(k)}: ${v}${getMaterialUnit(k)}`,25,y); y+=10; } });
+      } else { doc.text('• No materials specified',25,y); y+=10; }
+      y+=15; doc.setFontSize(14); doc.setTextColor(5,150,105); doc.text('Items to Move:',20,y); y+=15; doc.setFontSize(11); doc.setTextColor(0,0,0);
+      if(formData.items && formData.items.length){
+        formData.items.forEach((item,idx)=>{ if(y>270){ doc.addPage(); y=30; } doc.text(`${idx+1}. ${item}`,25,y); y+=10; });
+      } else { doc.text('• No items specified',25,y); }
+      if(formData.extraDescription){ y+=15; doc.setFontSize(14); doc.setTextColor(5,150,105); doc.text('Additional Description:',20,y); y+=12; doc.setFontSize(11); doc.setTextColor(0,0,0); const lines = doc.splitTextToSize(formData.extraDescription, 170); lines.forEach(line=>{ if(y>270){ doc.addPage(); y=30; } doc.text(line,20,y); y+=8; }); }
+      addFooter(doc); pushFile(doc,'Planning Sheet');
+    }
+
+    function generateAgreementPaper(){
+      const { jsPDF } = window.jspdf; const doc = new jsPDF(); addHeader(doc,'AGREEMENT PAPER');
+      let y=70; doc.setFontSize(12); doc.setTextColor(0,0,0);
+      const sections=[
+        {title:'Agreement Details',content:[`This agreement is made between A to Z Packers & Movers and ${formData.customerName||'N/A'}.`,`Date: ${new Date().toLocaleDateString()}`,`Agreement ID: AZ-AGR-${Date.now()}`]},
+        {title:'Customer Details',content:[`Name: ${formData.customerName||'N/A'}`,`Contact: ${formData.contactNumber||'N/A'}`,`Moving from: ${formData.fromLocation||'N/A'}`,`Moving to: ${formData.toLocation||'N/A'}`]},
+        {title:'Service Details',content:[`Start Date: ${formatDate(formData.startDate)}`,`End Date: ${formatDate(formData.endDate)}`,`Workers Required: ${formData.workers||0}`,`Vehicle Type: ${formData.vehicleType||'N/A'}`]},
+        {title:'Payment Terms',content:[
+          `Base Amount: ₹${formatCurrency(formData.baseAmount||0)}`,
+          `GST (12%): ₹${formatCurrency(formData.gstAmount||0)}`,
+          `Surcharge 5%: ₹${formatCurrency(formData.fivePctAmount||0)}`,
+          `Electrification (${formData.electrification||'None'}): ₹${formatCurrency(formData.electrificationFee||0)}`,
+          `Grand Total: ₹${formatCurrency(formData.totalAmount||0)}`,
+          `Advance: ₹${formatCurrency(formData.advanceAmount||0)}`,
+          `Balance: ₹${formatCurrency((formData.totalAmount||0)-(formData.advanceAmount||0))}`
+        ]},
+        {title:'Terms & Conditions',content:[formData.paymentTerms||'90% payment at loading point and the remaining 10% at unloading point','Company is not responsible for items not mentioned in the item list.','Insurance coverage available on request with additional charges.','Any damage due to natural calamities is not covered.']}
+      ];
+      sections.forEach(sec=>{ if(y>250){ doc.addPage(); y=30; }
+        doc.setFontSize(14); doc.setTextColor(5,150,105); doc.text(sec.title,20,y); y+=15; doc.setFontSize(11); doc.setTextColor(0,0,0);
+        sec.content.forEach(line=>{ if(y>270){ doc.addPage(); y=30; } doc.text(line,25,y); y+=10; }); y+=6; });
+      if(formData.extraDescription){ if(y>250){ doc.addPage(); y=30; } doc.setFontSize(14); doc.setTextColor(5,150,105); doc.text('Additional Description:',20,y); y+=12; doc.setFontSize(11); doc.setTextColor(0,0,0); const lines = doc.splitTextToSize(formData.extraDescription, 170); lines.forEach(line=>{ if(y>270){ doc.addPage(); y=30; } doc.text(line,20,y); y+=8; }); }
+      addFooter(doc); pushFile(doc,'Agreement Paper');
+    }
+
+    function generateItemList(){
+      const { jsPDF } = window.jspdf; const doc = new jsPDF(); addHeader(doc,'ITEM LIST');
+      let y=70; doc.setFontSize(12); doc.setTextColor(0,0,0);
+      doc.text(`Customer: ${formData.customerName||'N/A'}`,20,y);
+      doc.text(`Contact: ${formData.contactNumber||'N/A'}`,20,y+10);
+      doc.text(`Date: ${new Date().toLocaleDateString()}`,20,y+20);
+      doc.text(`List ID: AZ-LIST-${Date.now()}`,120,y+20);
+      y+=40; doc.setFontSize(14); doc.setTextColor(5,150,105); doc.text('Items to be Moved:',20,y);
+      y+=20; doc.setFontSize(11); doc.setTextColor(0,0,0);
+      if(formData.items && formData.items.length){
+        doc.line(20,y-5,190,y-5); doc.text('S.No.',25,y); doc.text('Item Description',50,y); doc.text('Quantity',150,y); doc.line(20,y+5,190,y+5); y+=15;
+        formData.items.forEach((item,idx)=>{ if(y>270){ doc.addPage(); y=30; doc.line(20,y-5,190,y-5); doc.text('S.No.',25,y); doc.text('Item Description',50,y); doc.text('Quantity',150,y); doc.line(20,y+5,190,y+5); y+=15; }
+          doc.text(String(idx+1),25,y); doc.text(item,50,y); doc.text('1',155,y); y+=12; });
+        doc.line(20,y,190,y); y+=15; doc.text(`Total Items: ${formData.items.length}`,20,y);
+      } else { doc.text('No items specified for this move.',25,y); }
+      if(formData.extraDescription){ y+=15; doc.setFontSize(14); doc.setTextColor(5,150,105); doc.text('Additional Description:',20,y); y+=12; doc.setFontSize(11); doc.setTextColor(0,0,0); const lines = doc.splitTextToSize(formData.extraDescription, 170); lines.forEach(line=>{ if(y>270){ doc.addPage(); y=30; } doc.text(line,20,y); y+=8; }); }
+      addFooter(doc); pushFile(doc,'Item List');
+    }
+
+    function generateBill(){
+      const { jsPDF } = window.jspdf; const doc = new jsPDF(); addHeader(doc,'BILL / INVOICE');
+      let y=70; doc.setFontSize(12); doc.setTextColor(0,0,0);
+      const billNo = `AZ-BILL-${Date.now()}`;
+      doc.text(`Bill No: ${billNo}`,20,y); doc.text(`Date: ${new Date().toLocaleDateString()}`,120,y);
+      y+=20; doc.text(`Customer: ${formData.customerName||'N/A'}`,20,y); doc.text(`Contact: ${formData.contactNumber||'N/A'}`,20,y+10);
+      doc.text(`Route: ${formData.fromLocation||'N/A'} → ${formData.toLocation||'N/A'}`,20,y+20);
+      doc.text(`Service Period: ${formatDate(formData.startDate)} to ${formatDate(formData.endDate)}`,20,y+30);
+      y+=50; doc.setFontSize(14); doc.setTextColor(5,150,105); doc.text('Charges',20,y); y+=10;
+
+      doc.setFontSize(11); doc.setTextColor(0,0,0); doc.line(20,y,190,y); y+=10;
+      doc.text('Description',25,y); doc.text('Amount',160,y); doc.line(20,y+5,190,y+5); y+=15;
+
+      doc.text('Base Services Amount',25,y); doc.text(`₹${formatCurrency(formData.baseAmount||0)}`,160,y); y+=8;
+      if(formData.electrification && formData.electrification !== 'None'){
+        doc.text(`Electrification (${formData.electrification})`,25,y); doc.text(`₹${formatCurrency(formData.electrificationFee||0)}`,160,y); y+=8;
+      } else {
+        doc.text('Electrification (None)',25,y); doc.text('₹0.00',160,y); y+=8;
+      }
+      doc.text(`GST (${formData.gstApplied?formData.gstRate:0}%)`,25,y); doc.text(`₹${formatCurrency(formData.gstAmount||0)}`,160,y); y+=8;
+      doc.text('Surcharge 5%',25,y); doc.text(`₹${formatCurrency(formData.fivePctAmount||0)}`,160,y); y+=8;
+      doc.line(20,y+2,190,y+2); y+=10;
+      doc.setFontSize(12); doc.text('Grand Total:',130,y); doc.text(`₹${formatCurrency(formData.totalAmount||0)}`,160,y);
+
+      y+=15; doc.setFontSize(11); doc.setTextColor(0,0,0); doc.text(`Advance Paid: ₹${formatCurrency(formData.advanceAmount||0)}`,25,y);
+      doc.text(`Balance Due: ₹${formatCurrency((formData.totalAmount||0)-(formData.advanceAmount||0))}`,25,y+10);
+      y+=25; doc.setFontSize(12); doc.setTextColor(5,150,105); doc.text('Amount in Words:',20,y); y+=10; doc.setFontSize(11); doc.setTextColor(0,0,0); doc.text(`${numberToWords(formData.totalAmount||0)} Rupees Only`,20,y);
+      if(formData.extraDescription){ y+=15; doc.setFontSize(12); doc.setTextColor(5,150,105); doc.text('Notes:',20,y); y+=10; doc.setFontSize(11); doc.setTextColor(0,0,0); const lines=doc.splitTextToSize(formData.extraDescription,170); lines.forEach(line=>{ if(y>270){ doc.addPage(); y=30; } doc.text(line,20,y); y+=8; }); }
+      addFooter(doc); pushFile(doc,'Bill');
+    }
+
+    function generateEstimate(){
+      const { jsPDF } = window.jspdf;
+      const doc = new jsPDF();
+
+      const base = Number(formData.baseAmount||0);
+      const gst = formData.gstAmount||0;
+      const five = formData.fivePctAmount||0;
+      const elec = formData.electrificationFee||0;
+      const grand = formData.totalAmount||0;
+
+      doc.setFontSize(20); doc.setTextColor(5,150,105);
+      doc.text('Estimate', 105, 20, { align: 'center' });
+      doc.setFontSize(12); doc.setTextColor(0,0,0);
+      doc.text('A to Z Packers & Movers', 20, 30);
+      doc.text('211 Deula Sahi, Tulasipur, Cuttack', 20, 36);
+      doc.text('Phone: +91 9338888550 | Email: manojgatbbi506@gmail.com', 20, 42);
+      doc.text('GSTIN: 21BBTPS3094R2ZN', 20, 48);
+
+      let y = 60;
+      doc.text(`Customer: ${formData.customerName || 'N/A'}`, 20, y);
+      doc.text(`Contact: ${formData.contactNumber || 'N/A'}`, 20, y + 6);
+      doc.text(`From: ${formData.fromLocation || 'N/A'}`, 20, y + 12);
+      doc.text(`To: ${formData.toLocation || 'N/A'}`, 20, y + 18);
+      doc.text(`Date: ${formatDate(formData.startDate)}`, 20, y + 24);
+
+      const pack = Math.min(4500, base);
+      const remainAfterPack = Math.max(0, base - pack);
+      const loadUnload = Math.min(4500, remainAfterPack);
+      const transport = Math.max(0, base - (pack + loadUnload));
+
+      const rows = [
+        { name: 'Packing & Materials', price: pack, amount: pack },
+        { name: 'Loading & Unloading', price: loadUnload, amount: loadUnload },
+        { name: `Transportation (${formData.vehicleType || 'Vehicle'})`, price: transport, amount: transport },
+        { name: `Electrification (${formData.electrification || 'None'})`, price: elec, amount: elec }
+      ];
+
+      y += 40;
+      doc.setFontSize(11); doc.setTextColor(5,150,105);
+      doc.text('#', 20, y); doc.text('Service Name', 30, y); doc.text('Price', 130, y); doc.text('Amount', 160, y);
+      doc.setDrawColor(5,150,105); doc.line(20, y + 2, 190, y + 2);
+
+      doc.setTextColor(0,0,0);
+      let rowY = y + 10;
+      rows.forEach((r, i) => {
+        if(rowY > 270){ doc.addPage(); rowY = 20; }
+        doc.text(String(i+1), 20, rowY);
+        const nameLines = doc.splitTextToSize(r.name, 90);
+        nameLines.forEach((ln, idx) => doc.text(30, rowY + idx*6, ln));
+        doc.text(`₹${formatCurrency(r.price)}`, 130, rowY);
+        doc.text(`₹${formatCurrency(r.amount)}`, 160, rowY);
+        rowY += Math.max(10, nameLines.length*6 + 2);
+      });
+
+      // Totals breakdown
+      rowY += 6; doc.setTextColor(5,150,105); doc.text('Totals:', 20, rowY); rowY += 8; doc.setTextColor(0,0,0);
+      doc.text(`Base Amount: ₹${formatCurrency(base)}`, 20, rowY); rowY += 6;
+      doc.text(`Electrification: ₹${formatCurrency(elec)}`, 20, rowY); rowY += 6;
+      doc.text(`GST (12%): ₹${formatCurrency(gst)}`, 20, rowY); rowY += 6;
+      doc.text(`Surcharge 5%: ₹${formatCurrency(five)}`, 20, rowY); rowY += 8;
+      doc.setFontSize(12); doc.setTextColor(5,150,105); doc.text(`Grand Total: ₹${formatCurrency(grand)}`, 20, rowY); rowY += 10; doc.setFontSize(11); doc.setTextColor(0,0,0);
+
+      rowY += 4; doc.setTextColor(5,150,105); doc.text('Estimate Amount in Words:', 20, rowY);
+      doc.setTextColor(0,0,0); rowY += 6; doc.text(`${numberToWords(grand)} Rupees Only`, 20, rowY);
+
+      rowY += 10; doc.setTextColor(5,150,105); doc.text('Terms & Conditions:', 20, rowY);
+      doc.setTextColor(0,0,0); rowY += 6;
+      const terms = [
+        '90% at loading point, 5% midway, 5% at unloading OR 100% for sharing consignments',
+        'Online payments only',
+        'Any extra items/services not listed will be charged additionally with prior intimation',
+        'AC uninstall/install: refunds/extra-effort charges apply based on on-site conditions'
+      ];
+      terms.forEach(t => { if(rowY>270){ doc.addPage(); rowY = 20; } doc.text(`• ${t}`, 20, rowY); rowY += 6; });
+
+      rowY += 8; doc.setTextColor(5,150,105); doc.text('Payment Details:', 20, rowY);
+      doc.setTextColor(0,0,0); rowY += 6;
+      ['Bank: State Bank of India','A/c No: 34372907502','IFSC: SBIN0001992','A/c Name: A To Z Packers And Movers'].forEach(line => {
+        if(rowY>270){ doc.addPage(); rowY = 20; }
+        doc.text(line, 20, rowY); rowY += 6;
+      });
+      rowY += 10; doc.text('Authorized Signatory & Stamp', 130, rowY);
+
+      pushFile(doc, 'Estimate');
+    }
+
+    function buildDownloadsUI(){
+      const box = document.getElementById('downloadsContainer');
+      box.innerHTML = '';
+      generatedFiles.forEach((f) => {
+        const a = document.createElement('a');
+        a.href = f.url; a.download = f.name; a.className = 'btn btn-primary'; a.textContent = `Download ${f.name}`;
+        a.style.flex='1 1 100%';
+        box.appendChild(a);
+
+        const pv = document.createElement('button');
+        pv.type='button'; pv.className='btn btn-secondary'; pv.textContent='Open Preview';
+        pv.onclick = () => { window.open(f.url, '_blank'); };
+        box.appendChild(pv);
+      });
+    }
+
+    function shareWhatsAppSummary(){
+      const materialsStr = Object.entries(formData.materials||{}).map(([k,v])=>`${k}:${v}`).join(', ');
+      const message = `New Request - A to Z Packers & Movers\n\nCustomer: ${formData.customerName}\nContact: ${formData.contactNumber}\nRoute: ${formData.fromLocation} → ${formData.toLocation}\nDates: ${formData.startDate} to ${formData.endDate}\nVehicle: ${formData.vehicleType}\nBase: ₹${formData.baseAmount}\nGST: ₹${formData.gstAmount}\n5%: ₹${formData.fivePctAmount}\nElectrification (${formData.electrification}): ₹${formData.electrificationFee}\nTotal: ₹${formData.totalAmount}\n\nMaterials: ${materialsStr}\nDocs: ${generatedFiles.map(f=>f.name).join(', ')}`;
+      const url = `https://wa.me/919338888550?text=${encodeURIComponent(message)}`;
+      window.open(url,'_blank');
+    }
+
+    function closeModal(){ document.getElementById('successModal').style.display='none'; }
+
+    function resetForm(){
+      document.getElementById('movingForm').reset();
+      selectedItems = []; updateSelectedItems(); updateMaterialsSummary();
+      document.querySelectorAll('.material-input').forEach(i => i.value = 0);
+      document.querySelectorAll('.item-option').forEach(o => o.classList.remove('selected'));
+      if(generatedFiles && generatedFiles.length){ generatedFiles.forEach(f => URL.revokeObjectURL(f.url)); generatedFiles = []; }
+      document.getElementById('totalAmount').value = '';
+      applyMaterialPresetForVehicle(document.getElementById('vehicleType').value);
+    }
+
+    window.onclick = function(e){ const modal = document.getElementById('successModal'); if(e.target === modal) closeModal(); }
+  </script>
+</body>
+</html>
