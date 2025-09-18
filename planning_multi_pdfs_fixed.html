@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>A to Z Packers & Movers - Planning Sheet</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    body{font-family:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:linear-gradient(135deg,#f8fafc 0%,#e2e8f0 100%);min-height:100vh;color:#1e293b;line-height:1.6}
+    .container{max-width:900px;margin:0 auto;padding:20px}
+    .header{text-align:center;margin-bottom:30px;background:#fff;padding:24px;border-radius:16px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+    .logo{width:80px;height:80px;background:linear-gradient(135deg,#059669 0%,#10b981 100%);border-radius:50%;margin:0 auto 12px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:32px;font-weight:700}
+    .company-name{font-size:28px;font-weight:700;color:#059669;margin-bottom:6px}
+    .tagline{color:#64748b;font-size:16px}
+    .form{background:#fff;border-radius:16px;padding:26px;box-shadow:0 4px 20px rgba(0,0,0,.08)}
+    .section{margin-bottom:28px}
+    .section-title{font-size:20px;font-weight:700;color:#059669;margin-bottom:14px;padding-bottom:8px;border-bottom:2px solid #e2e8f0}
+    .grid{display:grid;grid-template-columns:1fr;gap:16px}
+    @media(min-width:640px){.grid-2{grid-template-columns:1fr 1fr}}
+    label{display:block;font-weight:600;color:#374151;margin-bottom:6px;font-size:14px}
+    .required{color:#ef4444}
+    input,select,textarea{width:100%;padding:12px 14px;border:2px solid #e2e8f0;border-radius:10px;font-size:16px;background:#fff;transition:border .15s ease}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:#059669;box-shadow:0 0 0 3px rgba(5,150,105,.08)}
+    textarea{min-height:90px;resize:vertical}
+    .muted{color:#64748b;font-size:12px;margin-top:6px}
+    .readonly{background:#f8fafc}
+    .flex{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{padding:12px 20px;border:none;border-radius:10px;font-weight:700;cursor:pointer}
+    .btn-primary{background:linear-gradient(135deg,#059669 0%,#10b981 100%);color:#fff}
+    .btn-secondary{background:#f1f5f9;color:#0f172a;border:2px solid #e2e8f0}
+    .items-wrap{border:2px solid #e2e8f0;border-radius:12px;max-height:260px;overflow:auto}
+    .category{position:sticky;top:0;background:#f8fafc;border-bottom:1px solid #e2e8f0;padding:8px 12px;font-weight:700;color:#0f172a}
+    .item{padding:10px 12px;border-bottom:1px solid #f1f5f9;cursor:pointer}
+    .item:hover{background:#f8fafc}
+    .item.selected{background:#dcfce7;color:#166534}
+    .chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+    .chip{background:#059669;color:#fff;padding:6px 10px;border-radius:999px;font-size:12px;display:flex;gap:6px;align-items:center}
+    .chip .x{cursor:pointer;font-weight:800}
+    .search{margin-bottom:10px}
+    .pill{display:inline-block;background:#dcfce7;color:#166534;padding:4px 10px;border-radius:9999px;font-size:12px;margin:4px 6px 0 0}
+    .calc{background:#f8fafc;border:2px dashed #e2e8f0;border-radius:12px;padding:12px}
+    .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);align-items:center;justify-content:center;z-index:1000}
+    .modal-inner{background:#fff;border-radius:14px;padding:22px;max-width:720px;width:92%}
+    .radio-row{display:flex;gap:12px;align-items:flex-start;flex-wrap:wrap;margin:8px 0 6px}
+    .radio{display:flex;gap:8px;align-items:flex-start;background:#f8fafc;border:2px solid #e2e8f0;padding:10px;border-radius:10px}
+    .table{width:100%;border-collapse:collapse;margin-top:10px}
+    .table th,.table td{border:1px solid #e5e7eb;padding:8px;text-align:left}
+    .table th{background:#f8fafc}
+    .badge{display:inline-block;background:#eef2ff;color:#3730a3;padding:2px 8px;border-radius:9999px;font-size:11px}
+    .link{color:#059669;text-decoration:underline;cursor:pointer}
+    .downloads {display:flex;flex-wrap:wrap;gap:10px;margin-top:10px}
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">AZ</div>
+      <h1 class="company-name">A to Z Packers & Movers</h1>
+      <p class="tagline">Professional Moving Solutions</p>
+    </div>
+
+    <form id="form" class="form">
+      <!-- Customer -->
+      <div class="section">
+        <h2 class="section-title">Customer Details</h2>
+        <div class="grid grid-2">
+          <div>
+            <label for="customerName">Customer Name <span class="required">*</span></label>
+            <input id="customerName" required />
+          </div>
+          <div>
+            <label for="contactNumber">Contact Number <span class="required">*</span></label>
+            <input id="contactNumber" inputmode="numeric" autocomplete="tel" required />
+            <div class="muted">10-digit Indian mobile preferred</div>
+          </div>
+          <div>
+            <label for="fromLocation">From Location <span class="required">*</span></label>
+            <input id="fromLocation" required />
+          </div>
+          <div>
+            <label for="toLocation">To Location <span class="required">*</span></label>
+            <input id="toLocation" required />
+          </div>
+        </div>
+      </div>
+
+      <!-- Job -->
+      <div class="section">
+        <h2 class="section-title">Job Details</h2>
+        <div class="grid grid-2">
+          <div>
+            <label for="startDate">Starting Date <span class="required">*</span></label>
+            <input type="date" id="startDate" required />
+          </div>
+          <div>
+            <label for="endDate">Ending Date <span class="required">*</span></label>
+            <input type="date" id="endDate" required />
+          </div>
+          <div>
+            <label for="workers">Number of Workers <span class="required">*</span></label>
+            <input type="number" id="workers" min="0" required />
+          </div>
+          <div>
+            <label for="vehicleType">Vehicle Type</label>
+            <select id="vehicleType">
+              <option>Pickup</option>
+              <option>10 Feet</option>
+              <option>14 Feet</option>
+              <option>17 Feet</option>
+              <option>18 Feet</option>
+              <option>Other</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- Payment -->
+      <div class="section">
+        <h2 class="section-title">Payment Details</h2>
+        <div class="grid grid-2">
+          <div>
+            <label for="baseAmount">Base Amount (₹) <span class="required">*</span></label>
+            <input type="number" id="baseAmount" min="0" value="0" required />
+          </div>
+          <div>
+            <label for="advanceAmount">Advance Amount (₹) <span class="required">*</span></label>
+            <input type="number" id="advanceAmount" min="0" value="0" required />
+          </div>
+          <div>
+            <label for="gstToggle">GST (12%)</label>
+            <select id="gstToggle">
+              <option value="on" selected>Apply 12% GST</option>
+              <option value="off">Do not apply</option>
+            </select>
+          </div>
+          <div>
+            <label for="fivePctToggle">5% Surcharge</label>
+            <select id="fivePctToggle">
+              <option value="on">Apply 5%</option>
+              <option value="off" selected>Do not apply</option>
+            </select>
+          </div>
+
+          <!-- Electrification: simple item + amount only -->
+          <div>
+            <label for="electrificationTotal">Electrification (items + amount)</label>
+            <div class="flex">
+              <input id="electrificationTotal" class="readonly" readonly value="0" />
+              <button class="btn btn-secondary" type="button" id="editElectrification">Add/Edit</button>
+            </div>
+            <div class="muted">Enter custom items with an amount. Sum auto-applies to the total.</div>
+            <div id="electroSummary" class="muted" style="margin-top:6px"></div>
+          </div>
+
+          <div>
+            <label for="totalAmount">Total Amount (calculated)</label>
+            <input id="totalAmount" class="readonly" readonly />
+            <div class="muted">Auto-calculated from Base + Surcharge + Electrification + GST.</div>
+          </div>
+        </div>
+
+        <div class="calc" id="calcBreakup" aria-live="polite"></div>
+
+        <!-- Payment Terms choice -->
+        <div style="margin-top:10px">
+          <label>Payment Terms & Conditions (choose one)</label>
+          <div class="radio-row" role="radiogroup" aria-labelledby="paymentTermsGroup">
+            <label class="radio">
+              <input type="radio" name="paymentTermOption" id="term90_10" value="90_10" checked />
+              <span>1. 90% payment at loading point and the remaining 10% at unloading point.</span>
+            </label>
+            <label class="radio">
+              <input type="radio" name="paymentTermOption" id="term100" value="100_sharing" />
+              <span>2. 100% payment at loading point. <em>(Only for the sharing basis of consignment)</em></span>
+            </label>
+          </div>
+          <textarea id="paymentTerms" class="readonly" readonly>90% payment at loading point and the remaining 10% at unloading point.</textarea>
+          <div class="muted">The text box reflects your selection and will be printed on the PDF.</div>
+        </div>
+      </div>
+
+      <!-- Materials -->
+      <div class="section">
+        <h2 class="section-title">Materials</h2>
+        <div id="materialsPills"></div>
+        <div class="grid grid-2" style="margin-top:10px">
+          <div>
+            <label for="lamination">Lamination (%)</label>
+            <input type="number" id="lamination" min="0" max="100" value="0" />
+          </div>
+          <div>
+            <label for="corrugatedSheet">Corrugated Sheet (%)</label>
+            <input type="number" id="corrugatedSheet" min="0" max="100" value="0" />
+          </div>
+          <div>
+            <label for="cartons">Cartons</label>
+            <input type="number" id="cartons" min="0" value="0" />
+          </div>
+          <div>
+            <label for="bubbleSheet">Bubble Sheet (%)</label>
+            <input type="number" id="bubbleSheet" min="0" max="100" value="0" />
+          </div>
+          <div>
+            <label for="fabricSheet">Fabric Sheet (%)</label>
+            <input type="number" id="fabricSheet" min="0" max="100" value="0" />
+          </div>
+          <div>
+            <label for="thermocol">Thermocol</label>
+            <input type="number" id="thermocol" min="0" value="0" />
+          </div>
+          <div>
+            <label for="blueFoam">Blue Foam (%)</label>
+            <input type="number" id="blueFoam" min="0" max="100" value="0" />
+          </div>
+          <div>
+            <label for="celloTape">Cello Tape</label>
+            <input type="number" id="celloTape" min="0" value="0" />
+          </div>
+        </div>
+      </div>
+
+      <!-- Items -->
+      <div class="section">
+        <h2 class="section-title">Item List</h2>
+        <input id="itemSearch" class="search" placeholder="Search items..." />
+        <div id="itemsContainer" class="items-wrap"></div>
+        <div id="selectedItems" class="chips"></div>
+
+        <div style="margin-top:12px">
+          <label for="extraDescription">Additional Description</label>
+          <textarea id="extraDescription" placeholder="Notes, floor/lift, etc."></textarea>
+        </div>
+      </div>
+
+      <div class="flex">
+        <button class="btn btn-primary" id="generateAllBtn" type="button">Generate All PDFs</button>
+        <button class="btn btn-secondary" id="resetBtn" type="button">Reset</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Modal: Downloads -->
+  <div class="modal" id="modal">
+    <div class="modal-inner">
+      <h3 style="margin-bottom:12px">Documents Generated</h3>
+      <p>Click to download each PDF.</p>
+      <div id="downloadList" class="downloads"></div>
+      <div class="flex" style="margin-top:14px">
+        <button class="btn btn-secondary" onclick="document.getElementById('modal').style.display='none'">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal: Electrification simple editor -->
+  <div class="modal" id="electroModal">
+    <div class="modal-inner">
+      <h3 style="margin-bottom:8px">Electrification Items</h3>
+      <div class="muted">Only two fields: <strong>Item</strong> and <strong>Amount (₹)</strong>. Add as many lines as you need.</div>
+      <table class="table" id="electroTable" aria-label="Electrification simple table">
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th>Amount (₹)</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+        <tfoot>
+          <tr>
+            <th style="text-align:right">Subtotal</th>
+            <th id="electroSubTotal">0</th>
+            <th></th>
+          </tr>
+        </tfoot>
+      </table>
+      <div class="flex" style="margin-top:12px">
+        <button class="btn btn-secondary" type="button" id="addRow">Add row</button>
+        <button class="btn btn-primary" id="saveElectro" type="button">Save</button>
+        <button class="btn btn-secondary" type="button" onclick="document.getElementById('electroModal').style.display='none'">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ---------- Item Catalog (with categories) ----------
+    const CATALOG = {
+      "Drawing Room": [
+        "Temple (Wooden/Marble)","T.V / Home Theater","T.V Trolly Small/Big","TV Unit (Small/Big)","Sofa Three Seater","Sofa Single Seater","Sofa Cum-Bed","Dining Table (4+1) (6+1)","Dining Table Top Glass","Double Cot (Dism/Fix)","Single Cot (Dism/Fix)","Mattresses (Folding/Box Type)","Dwaan","Almirah (Big/Small)","Computer Set","Computer Table/Writing","Dressing Table","Side Table/Corner Table","Center Table / Top Glass","Sewing Machine","Book Self","Chest of Drawer","A.C / Window / Split","Sitting / Pedestal Fan","Cooler / Disert / Room","Chairs (Plastics/Steel/Wooden)","Showcase","Music System","Speaker"
+      ],
+      "Kitchen": ["Aqua Guard","Utensils Rack","Exhaust","Gas Stove","Oven / Cooking Range","Microwave","Utensils","Fridge (90°/165/189/230)","Crockery","Wet Grinder / Mixer"],
+      "Lobby": ["Suitcase / Trunks","Flower Post / Vas","Chairs (Rocking / Foldable)","Swing (Jhoola)","Rest Hanging Chair","Flower Pots","Bean Bag","Treadmill","Shoe Rack","Vacuum Cleaner","Invertor","UPS","Batteries","Wall Frames","Books","Carpets"],
+      "Bath Room": ["Geyser","Washing Machine","Bath Tub / Buckets","Cloth Box / Stand"],
+      "Misc Items": ["Scooter / Motor Cycle / Moped","Cycle / Exercise Cycle","Car Santro / Polio / Maruti","Luxury Car"],
+      "Total Cartons Required": ["Cloths Cartons","Utensils Cartons","Crockery Cartons","Books Cartons","Toys Cartons","Showpieces Cartons"],
+      "Not to be packed, but counting purpose": ["Steel Trunks","Wooden Boxes","Swing / Jhoola","Flower Pot"]
+    };
+
+    let selectedItems = [];
+
+    function renderCatalog() {
+      const wrap = document.getElementById('itemsContainer');
+      wrap.innerHTML = '';
+      Object.entries(CATALOG).forEach(([cat, items]) => {
+        const catEl = document.createElement('div');
+        catEl.className = 'category';
+        catEl.textContent = cat;
+        wrap.appendChild(catEl);
+
+        items.forEach(label => {
+          const div = document.createElement('div');
+          div.className = 'item';
+          div.textContent = label;
+          div.dataset.category = cat;
+          div.onclick = () => toggleItem(label, div);
+          wrap.appendChild(div);
+        });
+      });
+    }
+
+    function toggleItem(label, el){
+      const idx = selectedItems.findIndex(x => x.label === label);
+      if(idx >= 0){
+        selectedItems.splice(idx,1);
+        el.classList.remove('selected');
+      } else {
+        selectedItems.push({ label, qty: 1 });
+        el.classList.add('selected');
+      }
+      renderChips();
+    }
+
+    function renderChips(){
+      const holder = document.getElementById('selectedItems');
+      holder.innerHTML = '';
+      selectedItems.forEach((it, i) => {
+        const chip = document.createElement('div');
+        chip.className = 'chip';
+        chip.innerHTML = `<span>${it.label}</span>
+          <span class="x" title="Remove" onclick="removeChip(${i})">×</span>`;
+        holder.appendChild(chip);
+      });
+    }
+
+    function removeChip(index){
+      const label = selectedItems[index].label;
+      selectedItems.splice(index,1);
+      document.querySelectorAll('.item').forEach(el => {
+        if(el.textContent === label){ el.classList.remove('selected'); }
+      });
+      renderChips();
+    }
+
+    document.getElementById('itemSearch').addEventListener('input', function(){
+      const q = this.value.toLowerCase();
+      document.querySelectorAll('#itemsContainer .item').forEach(el => {
+        el.style.display = el.textContent.toLowerCase().includes(q) ? 'block' : 'none';
+      });
+    });
+
+    // ---------- Materials pills ----------
+    const MATERIAL_IDS = ['lamination','corrugatedSheet','cartons','bubbleSheet','fabricSheet','thermocol','blueFoam','celloTape'];
+    function refreshMaterialPills(){
+      const box = document.getElementById('materialsPills');
+      box.innerHTML = '';
+      const labels = {lamination:'Lamination', corrugatedSheet:'Corrugated Sheet', cartons:'Cartons', bubbleSheet:'Bubble Sheet', fabricSheet:'Fabric Sheet', thermocol:'Thermocol', blueFoam:'Blue Foam', celloTape:'Cello Tape'};
+      MATERIAL_IDS.forEach(id => {
+        const v = Number(document.getElementById(id).value||0);
+        if(v>0){
+          const unit = ['lamination','corrugatedSheet','bubbleSheet','fabricSheet','blueFoam'].includes(id) ? '%' : '';
+          const pill = document.createElement('span');
+          pill.className = 'pill';
+          pill.textContent = `${labels[id]}: ${v}${unit}`;
+          box.appendChild(pill);
+        }
+      });
+    }
+    MATERIAL_IDS.forEach(id => document.getElementById(id).addEventListener('input', refreshMaterialPills));
+
+    // ---------- Vehicle presets ----------
+    document.getElementById('vehicleType').addEventListener('change', (e)=>applyPreset(e.target.value));
+    function applyPreset(type){
+      const set = (id,v)=>document.getElementById(id).value=v;
+      MATERIAL_IDS.forEach(id=>set(id,0));
+      switch(type){
+        case 'Pickup': set('fabricSheet',15); set('celloTape',5); set('bubbleSheet',15); set('thermocol',3); set('lamination',50); set('blueFoam',15); break;
+        case '14 Feet': set('fabricSheet',28); set('celloTape',7); set('bubbleSheet',20); set('thermocol',4); set('lamination',60); set('blueFoam',25); set('cartons',20); break;
+        case '17 Feet': set('fabricSheet',30); set('cartons',25); set('celloTape',8); set('bubbleSheet',25); set('thermocol',4); set('lamination',80); set('blueFoam',25); break;
+        case '18 Feet': set('fabricSheet',30); set('celloTape',8); set('bubbleSheet',25); set('thermocol',4); set('lamination',80); set('blueFoam',25); set('cartons',30); break;
+        default: break;
+      }
+      refreshMaterialPills();
+    }
+
+    // ---------- Electrification (simple) ----------
+    const electrificationTotalEl = document.getElementById('electrificationTotal');
+    const electroModal = document.getElementById('electroModal');
+    const electroTbody = document.querySelector('#electroTable tbody');
+    const electroSubTotalEl = document.getElementById('electroSubTotal');
+    const electroSummary = document.getElementById('electroSummary');
+
+    document.getElementById('editElectrification').addEventListener('click', () => {
+      electroModal.style.display = 'flex';
+      if(!electroTbody.children.length){ addRow(); addRow(); }
+      recalcElectro();
+    });
+    document.getElementById('addRow').addEventListener('click', () => addRow());
+    function addRow(itemVal='', amtVal=''){
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td><input type="text" class="el_item" placeholder="e.g., AC install" value="${itemVal}"/></td>
+        <td><input type="number" class="el_amt" min="0" step="0.01" value="${amtVal}"/></td>
+        <td><span class="link" onclick="this.closest('tr').remove(); recalcElectro();">Remove</span></td>`;
+      electroTbody.appendChild(tr);
+      tr.querySelectorAll('input').forEach(inp => inp.addEventListener('input', recalcElectro));
+    }
+    document.getElementById('saveElectro').addEventListener('click', () => { electroModal.style.display = 'none'; recalcElectro(); });
+    function recalcElectro(){
+      let sum = 0; const lines = [];
+      document.querySelectorAll('#electroTable .el_item').forEach((itemEl, idx) => {
+        const amtEl = document.querySelectorAll('#electroTable .el_amt')[idx];
+        const name = (itemEl.value || '').trim();
+        const amt = parseFloat(amtEl.value || '0') || 0;
+        if(name && amt > 0){ sum += amt; lines.push(`${name}: ₹${amt.toFixed(2)}`); }
+      });
+      electrificationTotalEl.value = sum.toFixed(2);
+      electroSubTotalEl.textContent = sum.toFixed(2);
+      electroSummary.innerHTML = lines.length ? ('Items: ' + lines.join(' • ')) : '';
+      computeTotal();
+    }
+
+    // ---------- Totals ----------
+    const baseAmountEl = document.getElementById('baseAmount');
+    const gstToggleEl = document.getElementById('gstToggle');
+    const fivePctEl = document.getElementById('fivePctToggle');
+    const totalAmountEl = document.getElementById('totalAmount');
+    const calcBreakup = document.getElementById('calcBreakup');
+    [baseAmountEl, gstToggleEl, fivePctEl].forEach(el => { el.addEventListener('input', computeTotal); el.addEventListener('change', computeTotal); });
+    function computeTotal(){
+      const base = (+baseAmountEl.value)||0;
+      const surcharge = (fivePctEl.value === 'on') ? base * 0.05 : 0;
+      const electrificationFee = parseFloat(electrificationTotalEl.value||'0') || 0;
+      const subTotal = base + surcharge + electrificationFee;
+      const gst = (gstToggleEl.value === 'on') ? subTotal * 0.12 : 0;
+      const grandTotal = Math.round(subTotal + gst);
+      totalAmountEl.value = grandTotal.toFixed(0);
+      calcBreakup.innerHTML = [
+        `<p><strong>Base:</strong> ₹${base.toFixed(2)}</p>`,
+        `<p><strong>5% Surcharge:</strong> ₹${surcharge.toFixed(2)} (${fivePctEl.value==='on'?'applied':'not applied'})</p>`,
+        `<p><strong>Electrification (items):</strong> ₹${electrificationFee.toFixed(2)}</p>`,
+        `<p><strong>GST 12%:</strong> ₹${gst.toFixed(2)} (${gstToggleEl.value==='on'?'applied':'not applied'})</p>`,
+        `<hr/>`,
+        `<p><strong>Grand Total:</strong> ₹${grandTotal.toFixed(2)}</p>`
+      ].join('');
+    }
+
+    // ---------- Terms ----------
+    const TERM_TEXTS = {
+      '90_10': '90% payment at loading point and the remaining 10% at unloading point.',
+      '100_sharing': '100% payment at loading point. (Only for the sharing basis of consignment)'
+    };
+    const termRadios = document.querySelectorAll('input[name="paymentTermOption"]');
+    const termBox = document.getElementById('paymentTerms');
+    termRadios.forEach(r => r.addEventListener('change', () => {
+      const val = document.querySelector('input[name="paymentTermOption"]:checked').value;
+      termBox.value = TERM_TEXTS[val];
+    }));
+
+    // ---------- PDF Helpers ----------
+    function brandHeader(doc, title){
+      doc.setDrawColor(5,150,105); doc.setFillColor(5,150,105);
+      doc.circle(14, 14, 8, 'F');
+      doc.setTextColor(255,255,255); doc.setFont('helvetica','bold'); doc.setFontSize(12);
+      doc.text('AZ', 10.5, 17);
+      doc.setTextColor(0,0,0);
+      doc.setFont('helvetica','bold'); doc.setFontSize(14); doc.text('A to Z Packers & Movers', 30, 14);
+      doc.setFont('helvetica','normal'); doc.setFontSize(11); doc.text(title, 30, 22);
+      doc.setDrawColor(226,232,240); doc.line(14, 26, 196, 26);
+    }
+    function kv(doc, x, y, k, v){
+      doc.setFont('helvetica','bold'); doc.text(k, x, y);
+      doc.setFont('helvetica','normal'); doc.text(v || '—', x+52, y);
+    }
+    function addTable(doc, startY, rows){
+      let y = startY;
+      rows.forEach(r => { doc.text(r, 14, y); y += 6; if(y>280){ doc.addPage(); y=20; }});
+      return y;
+    }
+    function parseElectroLines(){
+      const txt = (electroSummary.textContent||'').replace(/^Items:\s*/,'').trim();
+      return txt ? txt.split(' • ') : [];
+    }
+
+    // ---------- Generate All PDFs ----------
+    document.getElementById('generateAllBtn').addEventListener('click', () => {
+      if(!window.jspdf || !window.jspdf.jsPDF){ alert('PDF engine failed to load. Check internet (jsPDF CDN).'); return; }
+      try{
+        // validate core fields
+        if(!document.getElementById('customerName').value.trim()){ alert('Please fill Customer Name'); return; }
+        if(!document.getElementById('fromLocation').value.trim() || !document.getElementById('toLocation').value.trim()){ alert('Please fill locations'); return; }
+        const mobile = (document.getElementById('contactNumber').value||'').replace(/\D/g,'');
+        if(mobile.length < 10){ alert('Please enter a valid 10-digit contact number'); return; }
+
+        const { jsPDF } = window.jspdf;
+        const downloads = [];
+
+        // 1) Item List
+        (function(){
+          const doc = new jsPDF(); brandHeader(doc, 'Item List');
+          let y=34;
+          kv(doc,14,y,'Customer',document.getElementById('customerName').value); y+=6;
+          kv(doc,14,y,'Phone',document.getElementById('contactNumber').value); y+=6;
+          kv(doc,14,y,'Route',`${document.getElementById('fromLocation').value} → ${document.getElementById('toLocation').value}`); y+=10;
+          doc.setFont('helvetica','bold'); doc.text('Selected Items',14,y); y+=8; doc.setFont('helvetica','normal');
+          const rows = selectedItems.length ? selectedItems.map((it,i)=>`${i+1}. ${it.label}`) : ['—'];
+          y = addTable(doc, y, rows);
+          downloads.push({name:'Item_List.pdf', blob:doc.output('blob')});
+        })();
+
+        // 2) Planning Sheet
+        (function(){
+          const doc = new jsPDF(); brandHeader(doc, 'Planning Sheet');
+          let y=34;
+          kv(doc,14,y,'Customer',document.getElementById('customerName').value); y+=6;
+          kv(doc,14,y,'Phone',document.getElementById('contactNumber').value); y+=6;
+          kv(doc,14,y,'Dates',`${document.getElementById('startDate').value} to ${document.getElementById('endDate').value}`); y+=6;
+          kv(doc,14,y,'Workers / Vehicle',`${document.getElementById('workers').value} / ${document.getElementById('vehicleType').value}`); y+=6;
+          kv(doc,14,y,'Route',`${document.getElementById('fromLocation').value} → ${document.getElementById('toLocation').value}`); y+=10;
+
+          doc.setFont('helvetica','bold'); doc.text('Materials',14,y); y+=8; doc.setFont('helvetica','normal');
+          const matRows = MATERIAL_IDS.map(id=>({id, v:document.getElementById(id).value})).filter(x=>+x.v>0).map((x)=>`• ${x.id.replace(/([A-Z])/g,' $1').replace(/^./,m=>m.toUpperCase())}: ${x.v}`);
+          y = addTable(doc, y, matRows.length?matRows:['—']);
+          y+=4;
+          doc.setFont('helvetica','bold'); doc.text('Electrification',14,y); y+=8; doc.setFont('helvetica','normal');
+          const eRows = parseElectroLines(); y = addTable(doc, y, eRows.length?eRows:['—']);
+          y+=4;
+          doc.setFont('helvetica','bold'); doc.text('Notes',14,y); y+=8; doc.setFont('helvetica','normal');
+          y = addTable(doc, y, [(document.getElementById('extraDescription').value||'—')]);
+
+          downloads.push({name:'Planning_Sheet.pdf', blob:doc.output('blob')});
+        })();
+
+        // 3) Agreement Bill
+        (function(){
+          const doc = new jsPDF(); brandHeader(doc, 'Agreement / Bill');
+          let y=34;
+          kv(doc,14,y,'Customer',document.getElementById('customerName').value); y+=6;
+          kv(doc,14,y,'Phone',document.getElementById('contactNumber').value); y+=6;
+          kv(doc,14,y,'Route',`${document.getElementById('fromLocation').value} → ${document.getElementById('toLocation').value}`); y+=6;
+          kv(doc,14,y,'Payment Terms',document.getElementById('paymentTerms').value); y+=10;
+
+          const base = (+document.getElementById('baseAmount').value)||0;
+          const surcharge = (document.getElementById('fivePctToggle').value === 'on') ? base*0.05 : 0;
+          const elec = parseFloat(document.getElementById('electrificationTotal').value||'0') || 0;
+          const subTotal = base + surcharge + elec;
+          const gst = (document.getElementById('gstToggle').value==='on') ? subTotal*0.12 : 0;
+          const grand = Math.round(subTotal + gst);
+          const adv = (+document.getElementById('advanceAmount').value)||0;
+          const balance = Math.max(0, grand - adv);
+
+          doc.setFont('helvetica','bold'); doc.text('Bill Summary (₹)',14,y); y+=8; doc.setFont('helvetica','normal');
+          const rows = [
+            `Base Amount: ₹${base.toFixed(2)}`,
+            `5% Surcharge: ₹${surcharge.toFixed(2)}`,
+            `Electrification: ₹${elec.toFixed(2)}`,
+            `GST 12%: ₹${gst.toFixed(2)}`,
+            `Grand Total: ₹${grand.toFixed(2)}`,
+            `Advance Paid: ₹${adv.toFixed(2)}`,
+            `Balance: ₹${balance.toFixed(2)}`
+          ];
+          y = addTable(doc, y, rows);
+          y+=8; doc.setFont('helvetica','bold'); doc.text('Signature',14,y); doc.line(34,y+2,100,y+2);
+
+          downloads.push({name:'Agreement_Bill.pdf', blob:doc.output('blob')});
+        })();
+
+        // 4) Quotation
+        (function(){
+          const doc = new jsPDF(); brandHeader(doc, 'Quotation');
+          let y=34;
+          kv(doc,14,y,'To',document.getElementById('customerName').value); y+=6;
+          kv(doc,14,y,'Contact',document.getElementById('contactNumber').value); y+=6;
+          kv(doc,14,y,'Subject',`Quotation for move: ${document.getElementById('fromLocation').value} → ${document.getElementById('toLocation').value}`); y+=10;
+
+          const base = (+document.getElementById('baseAmount').value)||0;
+          const surcharge = (document.getElementById('fivePctToggle').value === 'on') ? base*0.05 : 0;
+          const elec = parseFloat(document.getElementById('electrificationTotal').value||'0') || 0;
+          const subTotal = base + surcharge + elec;
+          const gst = (document.getElementById('gstToggle').value==='on') ? subTotal*0.12 : 0;
+          const grand = Math.round(subTotal + gst);
+
+          doc.setFont('helvetica','bold'); doc.text('Price Breakup (₹)',14,y); y+=8; doc.setFont('helvetica','normal');
+          y = addTable(doc, y, [
+            `Base: ₹${base.toFixed(2)}`,
+            `5% Surcharge: ₹${surcharge.toFixed(2)}`,
+            `Electrification: ₹${elec.toFixed(2)}`,
+            `GST 12%: ₹${gst.toFixed(2)}`,
+            `Quoted Total: ₹${grand.toFixed(2)}`
+          ]);
+          y+=6; doc.setFont('helvetica','bold'); doc.text('Terms & Conditions',14,y); y+=8; doc.setFont('helvetica','normal');
+          y = addTable(doc, y, [
+            '• Transit insurance, if required, is extra.',
+            '• Stair / long-carry / waiting charges, if applicable, are extra.',
+            `• Payment Terms: ${document.getElementById('paymentTerms').value}`,
+            '• Quote valid for 7 days.'
+          ]);
+          downloads.push({name:'Quotation.pdf', blob:doc.output('blob')});
+        })();
+
+        // 5) Work Order (Job Card)
+        (function(){
+          const doc = new jsPDF(); brandHeader(doc, 'Work Order');
+          let y=34;
+          kv(doc,14,y,'Customer',document.getElementById('customerName').value); y+=6;
+          kv(doc,14,y,'Dates',`${document.getElementById('startDate').value} to ${document.getElementById('endDate').value}`); y+=6;
+          kv(doc,14,y,'Workers',`${document.getElementById('workers').value}`); y+=6;
+          kv(doc,14,y,'Vehicle',`${document.getElementById('vehicleType').value}`); y+=10;
+
+          doc.setFont('helvetica','bold'); doc.text('Scope',14,y); y+=8; doc.setFont('helvetica','normal');
+          const scope = selectedItems.slice(0,25).map((it,i)=>`${i+1}. ${it.label}`);
+          y = addTable(doc, y, scope.length?scope:['—']);
+          y+=8; doc.setFont('helvetica','bold'); doc.text('Instructions',14,y); y+=8; doc.setFont('helvetica','normal');
+          y = addTable(doc, y, [
+            '• Handle fragile items with bubble sheet.',
+            '• Confirm lift availability at both locations.',
+            '• Obtain customer sign-off after unloading.'
+          ]);
+          downloads.push({name:'Work_Order.pdf', blob:doc.output('blob')});
+        })();
+
+        // Show links
+        const list = document.getElementById('downloadList'); list.innerHTML='';
+        downloads.forEach(file => {
+          const url = URL.createObjectURL(file.blob);
+          const a = document.createElement('a');
+          a.href = url; a.download = file.name; a.className='btn btn-primary'; a.textContent = file.name;
+          list.appendChild(a);
+        });
+        document.getElementById('modal').style.display = 'flex';
+      } catch(err){
+        alert('Could not generate PDFs: ' + (err && err.message ? err.message : err));
+      }
+    });
+
+    // Reset
+    document.getElementById('resetBtn').addEventListener('click', () => {
+      document.getElementById('form').reset();
+      selectedItems = [];
+      document.querySelectorAll('.item.selected').forEach(el=>el.classList.remove('selected'));
+      renderChips();
+      refreshMaterialPills();
+      applyPreset(document.getElementById('vehicleType').value);
+      document.querySelector('#electroTable tbody').innerHTML='';
+      electrificationTotalEl.value = '0.00';
+      electroSubTotalEl.textContent = '0.00';
+      electroSummary.textContent = '';
+      computeTotal();
+      document.getElementById('term90_10').checked = true;
+      document.getElementById('paymentTerms').value = '90% payment at loading point and the remaining 10% at unloading point.';
+    });
+
+    // Init on load
+    renderCatalog();
+    refreshMaterialPills();
+    applyPreset(document.getElementById('vehicleType').value);
+    computeTotal(); // ensure totals populate on first load
+  </script>
+</body>
+</html>
